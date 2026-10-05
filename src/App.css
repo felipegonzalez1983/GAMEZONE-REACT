@@ -1,0 +1,21 @@
+import { Routes, Route } from "react-router-dom";
+
+import Inicio from "./pages/Inicio";
+import Productos from "./pages/Productos";
+import Carrito from "./pages/Carrito";
+import Contacto from "./pages/Contacto";
+import Login from "./pages/Login";
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Inicio />} />
+      <Route path="/productos" element={<Productos />} />
+      <Route path="/carrito" element={<Carrito />} />
+      <Route path="/contacto" element={<Contacto />} />
+      <Route path="/login" element={<Login />} />
+    </Routes>
+  );
+}
+
+export default App;
