@@ -11,6 +11,7 @@ import DetalleBlog from "./pages/DetalleBlog";
 import Login from "./pages/Login";
 import DetalleProducto from "./pages/DetalleProducto";
 import Registro from "./pages/Registro";
+import Historial from "./pages/Historial";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/blogs/:id" element={<DetalleBlog />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/historial" element={<Historial />} />
       </Route>
     </Routes>
   );

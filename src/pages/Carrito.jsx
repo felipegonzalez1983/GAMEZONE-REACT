@@ -1,8 +1,20 @@
-import { NavLink } from "react-router-dom";
-import { useCarrito } from "../context/CarritoContext";
+import {
+  NavLink,
+  useNavigate
+} from "react-router-dom";
+
+import {
+  useCarrito
+} from "../context/CarritoContext";
+
+import {
+  useUsuario
+} from "../context/UsuarioContext";
 
 
 function Carrito() {
+
+  const navigate = useNavigate();
 
   const {
     carrito,
@@ -11,6 +23,10 @@ function Carrito() {
     vaciarCarrito,
     totalCarrito
   } = useCarrito();
+
+  const {
+    usuario
+  } = useUsuario();
 
 
   function formatearPrecio(precio) {
@@ -40,13 +56,126 @@ function Carrito() {
   }
 
 
+  function finalizarCompra() {
+
+    /* VALIDAR SESIÓN */
+
+    if (!usuario) {
+
+      alert(
+        "Debes iniciar sesión para finalizar la compra."
+      );
+
+      navigate("/login");
+
+      return;
+
+    }
+
+
+    /* CONFIRMAR COMPRA */
+
+    const confirmar =
+      window.confirm(
+        `¿Deseas finalizar tu compra por ${formatearPrecio(totalCarrito)}?`
+      );
+
+
+    if (!confirmar) {
+      return;
+    }
+
+
+    /* CREAR COMPRA */
+
+    const nuevaCompra = {
+
+      id:
+        `GZ-${Date.now()}`,
+
+      correoUsuario:
+        usuario.correo,
+
+      nombreUsuario:
+        usuario.nombre,
+
+      fecha:
+        new Date().toISOString(),
+
+      productos:
+        carrito.map(
+          (producto) => ({
+            ...producto
+          })
+        ),
+
+      total:
+        totalCarrito
+
+    };
+
+
+    /* RECUPERAR COMPRAS ANTERIORES */
+
+    let comprasGuardadas = [];
+
+
+    try {
+
+      comprasGuardadas =
+        JSON.parse(
+          localStorage.getItem(
+            "comprasGameZone"
+          )
+        ) || [];
+
+    } catch {
+
+      comprasGuardadas = [];
+
+    }
+
+
+    /* GUARDAR COMPRA */
+
+    const nuevasCompras = [
+      ...comprasGuardadas,
+      nuevaCompra
+    ];
+
+
+    localStorage.setItem(
+      "comprasGameZone",
+      JSON.stringify(
+        nuevasCompras
+      )
+    );
+
+
+    /* VACIAR CARRITO */
+
+    vaciarCarrito();
+
+
+    alert(
+      "Compra realizada correctamente."
+    );
+
+
+    navigate("/historial");
+
+  }
+
+
   if (carrito.length === 0) {
 
     return (
 
       <main className="container py-5">
 
-        <h1>Carrito</h1>
+        <h1>
+          Carrito
+        </h1>
 
         <div className="carrito-vacio">
 
@@ -126,6 +255,7 @@ function Carrito() {
                       subtotal
                     )}
                   </strong>
+
                 </p>
 
               </div>
@@ -180,7 +310,9 @@ function Carrito() {
 
         <h2>
           Total:{" "}
-          {formatearPrecio(totalCarrito)}
+          {formatearPrecio(
+            totalCarrito
+          )}
         </h2>
 
 
@@ -188,7 +320,9 @@ function Carrito() {
 
           <button
             className="btn btn-danger"
-            onClick={manejarVaciarCarrito}
+            onClick={
+              manejarVaciarCarrito
+            }
           >
             Vaciar carrito
           </button>
@@ -196,10 +330,8 @@ function Carrito() {
 
           <button
             className="btn btn-warning"
-            onClick={() =>
-              alert(
-                "Compra realizada correctamente."
-              )
+            onClick={
+              finalizarCompra
             }
           >
             Finalizar compra

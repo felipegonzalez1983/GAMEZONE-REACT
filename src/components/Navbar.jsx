@@ -16,8 +16,9 @@ function Navbar() {
 
   const navigate = useNavigate();
 
-  const { cantidadCarrito } =
-    useCarrito();
+  const {
+    cantidadCarrito
+  } = useCarrito();
 
   const {
     usuario,
@@ -44,6 +45,8 @@ function Navbar() {
 
       <div className="container">
 
+        {/* LOGO */}
+
         <NavLink
           className="navbar-brand"
           to="/"
@@ -57,6 +60,8 @@ function Navbar() {
 
         </NavLink>
 
+
+        {/* BOTÓN PARA CELULAR */}
 
         <button
           className="navbar-toggler"
@@ -74,12 +79,17 @@ function Navbar() {
         </button>
 
 
+        {/* MENÚ */}
+
         <div
           className="collapse navbar-collapse"
           id="menuPrincipal"
         >
 
           <ul className="navbar-nav ms-lg-4 align-items-lg-center">
+
+
+            {/* INICIO */}
 
             <li className="nav-item">
 
@@ -93,6 +103,8 @@ function Navbar() {
             </li>
 
 
+            {/* PRODUCTOS */}
+
             <li className="nav-item">
 
               <NavLink
@@ -105,6 +117,8 @@ function Navbar() {
             </li>
 
 
+            {/* CARRITO */}
+
             <li className="nav-item">
 
               <NavLink
@@ -112,26 +126,34 @@ function Navbar() {
                 to="/carrito"
               >
 
-                 Carrito
+                Carrito
 
                 <span className="badge bg-warning text-dark ms-1">
+
                   {cantidadCarrito}
+
                 </span>
 
               </NavLink>
 
             </li>
 
+
+            {/* NOSOTROS */}
+
             <li className="nav-item">
 
               <NavLink
                 className="nav-link"
                 to="/nosotros"
-  >
+              >
                 Nosotros
               </NavLink>
 
             </li>
+
+
+            {/* BLOGS */}
 
             <li className="nav-item">
 
@@ -145,6 +167,8 @@ function Navbar() {
             </li>
 
 
+            {/* CONTACTO */}
+
             <li className="nav-item">
 
               <NavLink
@@ -157,9 +181,31 @@ function Navbar() {
             </li>
 
 
+            {/* OPCIONES SI EL USUARIO INICIÓ SESIÓN */}
+
             {usuario ? (
 
               <>
+
+                {/* HISTORIAL SOLO PARA CLIENTES */}
+
+                {usuario.rol === "Cliente" && (
+
+                  <li className="nav-item">
+
+                    <NavLink
+                      className="nav-link"
+                      to="/historial"
+                    >
+                      Mis compras
+                    </NavLink>
+
+                  </li>
+
+                )}
+
+
+                {/* NOMBRE DEL USUARIO */}
 
                 <li className="nav-item">
 
@@ -172,11 +218,15 @@ function Navbar() {
                 </li>
 
 
+                {/* CERRAR SESIÓN */}
+
                 <li className="nav-item">
 
                   <button
                     className="btn btn-outline-warning ms-lg-2"
-                    onClick={manejarCerrarSesion}
+                    onClick={
+                      manejarCerrarSesion
+                    }
                   >
                     Cerrar sesión
                   </button>
@@ -186,6 +236,8 @@ function Navbar() {
               </>
 
             ) : (
+
+              /* SI NO HAY SESIÓN */
 
               <li className="nav-item">
 
@@ -199,6 +251,7 @@ function Navbar() {
               </li>
 
             )}
+
 
           </ul>
 
