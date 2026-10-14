@@ -30,9 +30,7 @@ export function ProductosProvider({
 
 
     if (!productosGuardados) {
-
       return productosIniciales;
-
     }
 
 
@@ -50,8 +48,6 @@ export function ProductosProvider({
 
   });
 
-
-  /* GUARDAR PRODUCTOS */
 
   useEffect(() => {
 
@@ -71,12 +67,14 @@ export function ProductosProvider({
 
     const nuevoId =
       productos.length > 0
+
         ? Math.max(
             ...productos.map(
               (producto) =>
                 producto.id
             )
           ) + 1
+
         : 1;
 
 
@@ -168,6 +166,53 @@ export function ProductosProvider({
   }
 
 
+  /* DESCONTAR STOCK AL COMPRAR */
+
+  function descontarStock(
+    productosComprados
+  ) {
+
+    setProductos(
+      (productosActuales) =>
+
+        productosActuales.map(
+          (producto) => {
+
+            const productoComprado =
+              productosComprados.find(
+                (item) =>
+                  item.id ===
+                  producto.id
+              );
+
+
+            if (!productoComprado) {
+              return producto;
+            }
+
+
+            const nuevoStock =
+              producto.stock -
+              productoComprado.cantidad;
+
+
+            return {
+              ...producto,
+
+              stock:
+                nuevoStock < 0
+                  ? 0
+                  : nuevoStock
+            };
+
+          }
+        )
+
+    );
+
+  }
+
+
   return (
 
     <ProductosContext.Provider
@@ -175,7 +220,8 @@ export function ProductosProvider({
         productos,
         agregarProducto,
         editarProducto,
-        eliminarProducto
+        eliminarProducto,
+        descontarStock
       }}
     >
 

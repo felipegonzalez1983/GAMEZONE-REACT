@@ -11,10 +11,16 @@ import {
   useUsuario
 } from "../context/UsuarioContext";
 
+import {
+  useProductos
+} from "../context/ProductosContext";
+
 
 function Carrito() {
 
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
+
 
   const {
     carrito,
@@ -24,17 +30,29 @@ function Carrito() {
     totalCarrito
   } = useCarrito();
 
+
   const {
     usuario
   } = useUsuario();
 
 
-  function formatearPrecio(precio) {
+  const {
+    productos,
+    descontarStock
+  } = useProductos();
 
-    return precio.toLocaleString("es-CL", {
-      style: "currency",
-      currency: "CLP"
-    });
+
+  function formatearPrecio(
+    precio
+  ) {
+
+    return precio.toLocaleString(
+      "es-CL",
+      {
+        style: "currency",
+        currency: "CLP"
+      }
+    );
 
   }
 
@@ -69,6 +87,48 @@ function Carrito() {
       navigate("/login");
 
       return;
+
+    }
+
+
+    /* VALIDAR STOCK ACTUAL */
+
+    for (
+      const productoCarrito
+      of carrito
+    ) {
+
+      const productoActual =
+        productos.find(
+          (producto) =>
+            producto.id ===
+            productoCarrito.id
+        );
+
+
+      if (!productoActual) {
+
+        alert(
+          `${productoCarrito.nombre} ya no está disponible.`
+        );
+
+        return;
+
+      }
+
+
+      if (
+        productoCarrito.cantidad >
+        productoActual.stock
+      ) {
+
+        alert(
+          `Stock insuficiente para ${productoActual.nombre}. Disponible: ${productoActual.stock}.`
+        );
+
+        return;
+
+      }
 
     }
 
@@ -115,7 +175,7 @@ function Carrito() {
     };
 
 
-    /* RECUPERAR COMPRAS ANTERIORES */
+    /* RECUPERAR COMPRAS */
 
     let comprasGuardadas = [];
 
@@ -138,17 +198,19 @@ function Carrito() {
 
     /* GUARDAR COMPRA */
 
-    const nuevasCompras = [
-      ...comprasGuardadas,
-      nuevaCompra
-    ];
-
-
     localStorage.setItem(
       "comprasGameZone",
-      JSON.stringify(
-        nuevasCompras
-      )
+      JSON.stringify([
+        ...comprasGuardadas,
+        nuevaCompra
+      ])
+    );
+
+
+    /* DESCONTAR STOCK */
+
+    descontarStock(
+      carrito
     );
 
 
@@ -162,12 +224,16 @@ function Carrito() {
     );
 
 
-    navigate("/historial");
+    navigate(
+      "/historial"
+    );
 
   }
 
 
-  if (carrito.length === 0) {
+  if (
+    carrito.length === 0
+  ) {
 
     return (
 
@@ -177,11 +243,13 @@ function Carrito() {
           Carrito
         </h1>
 
+
         <div className="carrito-vacio">
 
           <p>
             Tu carrito está vacío.
           </p>
+
 
           <NavLink
             to="/productos"
@@ -210,98 +278,117 @@ function Carrito() {
 
       <div className="lista-carrito">
 
-        {carrito.map((producto) => {
+        {carrito.map(
+          (producto) => {
 
-          const subtotal =
-            producto.precio *
-            producto.cantidad;
-
-
-          return (
-
-            <article
-              key={producto.id}
-              className="producto-carrito"
-            >
-
-              <div className="carrito-imagen">
-
-                <img
-                  src={producto.imagen}
-                  alt={producto.nombre}
-                />
-
-              </div>
+            const subtotal =
+              producto.precio *
+              producto.cantidad;
 
 
-              <div className="carrito-info">
+            return (
 
-                <h2>
-                  {producto.nombre}
-                </h2>
+              <article
+                key={
+                  producto.id
+                }
+                className="producto-carrito"
+              >
 
-                <p>
-                  Precio:{" "}
-                  {formatearPrecio(
-                    producto.precio
-                  )}
-                </p>
+                <div className="carrito-imagen">
 
-                <p>
-                  Subtotal:{" "}
+                  <img
+                    src={
+                      producto.imagen
+                    }
+                    alt={
+                      producto.nombre
+                    }
+                  />
 
-                  <strong>
+                </div>
+
+
+                <div className="carrito-info">
+
+                  <h2>
+                    {producto.nombre}
+                  </h2>
+
+
+                  <p>
+
+                    Precio:{" "}
+
                     {formatearPrecio(
-                      subtotal
+                      producto.precio
                     )}
-                  </strong>
 
-                </p>
-
-              </div>
+                  </p>
 
 
-              <div className="carrito-cantidad">
+                  <p>
 
-                <label>
-                  Cantidad
-                </label>
+                    Subtotal:{" "}
 
-                <input
-                  type="number"
-                  min="1"
-                  value={producto.cantidad}
-                  onChange={(evento) =>
-                    cambiarCantidad(
-                      producto.id,
-                      evento.target.value
-                    )
-                  }
-                />
+                    <strong>
 
-              </div>
+                      {formatearPrecio(
+                        subtotal
+                      )}
+
+                    </strong>
+
+                  </p>
+
+                </div>
 
 
-              <div className="carrito-eliminar">
+                <div className="carrito-cantidad">
 
-                <button
-                  className="btn btn-danger"
-                  onClick={() =>
-                    eliminarDelCarrito(
-                      producto.id
-                    )
-                  }
-                >
-                  Eliminar
-                </button>
+                  <label>
+                    Cantidad
+                  </label>
 
-              </div>
 
-            </article>
+                  <input
+                    type="number"
+                    min="1"
+                    value={
+                      producto.cantidad
+                    }
+                    onChange={(evento) =>
+                      cambiarCantidad(
+                        producto.id,
+                        evento.target.value
+                      )
+                    }
+                  />
 
-          );
+                </div>
 
-        })}
+
+                <div className="carrito-eliminar">
+
+                  <button
+                    className="btn btn-danger"
+                    onClick={() =>
+                      eliminarDelCarrito(
+                        producto.id
+                      )
+                    }
+                  >
+                    Eliminar
+                  </button>
+
+                </div>
+
+              </article>
+
+            );
+
+          }
+        )}
 
       </div>
 
@@ -309,10 +396,13 @@ function Carrito() {
       <div className="resumen-carrito">
 
         <h2>
+
           Total:{" "}
+
           {formatearPrecio(
             totalCarrito
           )}
+
         </h2>
 
 

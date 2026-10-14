@@ -16,7 +16,10 @@ import Blogs from "./pages/Blogs";
 import DetalleBlog from "./pages/DetalleBlog";
 import Login from "./pages/Login";
 import Registro from "./pages/Registro";
+
 import Admin from "./pages/Admin";
+import AdminUsuarios from "./pages/AdminUsuarios";
+import AdminNuevoUsuario from "./pages/AdminNuevoUsuario";
 
 
 function App() {
@@ -82,9 +85,22 @@ function App() {
           element={<Registro />}
         />
 
+
+        {/* ADMINISTRACIÓN */}
+
         <Route
           path="/admin"
           element={<Admin />}
+        />
+
+        <Route
+          path="/admin/usuarios"
+          element={<AdminUsuarios />}
+        />
+
+        <Route
+          path="/admin/usuarios/nuevo"
+          element={<AdminNuevoUsuario />}
         />
 
       </Route>

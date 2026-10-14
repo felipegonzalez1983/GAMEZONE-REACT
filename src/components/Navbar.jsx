@@ -89,6 +89,8 @@ function Navbar() {
           <ul className="navbar-nav ms-lg-4 align-items-lg-center">
 
 
+            {/* INICIO */}
+
             <li className="nav-item">
 
               <NavLink
@@ -100,6 +102,8 @@ function Navbar() {
 
             </li>
 
+
+            {/* PRODUCTOS */}
 
             <li className="nav-item">
 
@@ -113,6 +117,8 @@ function Navbar() {
             </li>
 
 
+            {/* CARRITO */}
+
             <li className="nav-item">
 
               <NavLink
@@ -123,15 +129,15 @@ function Navbar() {
                 Carrito
 
                 <span className="badge bg-warning text-dark ms-1">
-
                   {cantidadCarrito}
-
                 </span>
 
               </NavLink>
 
             </li>
 
+
+            {/* NOSOTROS */}
 
             <li className="nav-item">
 
@@ -145,6 +151,8 @@ function Navbar() {
             </li>
 
 
+            {/* BLOG */}
+
             <li className="nav-item">
 
               <NavLink
@@ -156,6 +164,8 @@ function Navbar() {
 
             </li>
 
+
+            {/* CONTACTO */}
 
             <li className="nav-item">
 
@@ -197,16 +207,32 @@ function Navbar() {
 
                 {usuario.rol === "Administrador" && (
 
-                  <li className="nav-item">
+                  <>
 
-                    <NavLink
-                      className="nav-link text-warning"
-                      to="/admin"
-                    >
-                      Administración
-                    </NavLink>
+                    <li className="nav-item">
 
-                  </li>
+                      <NavLink
+                        className="nav-link text-warning"
+                        to="/admin"
+                      >
+                        Administración
+                      </NavLink>
+
+                    </li>
+
+
+                    <li className="nav-item">
+
+                      <NavLink
+                        className="nav-link text-warning"
+                        to="/admin/usuarios"
+                      >
+                        Usuarios
+                      </NavLink>
+
+                    </li>
+
+                  </>
 
                 )}
 
