@@ -1,29 +1,55 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import {
+  StrictMode
+} from "react";
 
-import { CarritoProvider } from "./context/CarritoContext";
-import { UsuarioProvider } from "./context/UsuarioContext";
+import {
+  createRoot
+} from "react-dom/client";
+
+import {
+  BrowserRouter
+} from "react-router-dom";
+
+
+import {
+  UsuarioProvider
+} from "./context/UsuarioContext";
+
+import {
+  ProductosProvider
+} from "./context/ProductosContext";
+
+import {
+  CarritoProvider
+} from "./context/CarritoContext";
+
 
 import "./style.css";
+
 import App from "./App.jsx";
 
 
 createRoot(
-  document.getElementById("root")
+  document.getElementById(
+    "root"
+  )
 ).render(
-  
+
   <StrictMode>
 
     <BrowserRouter>
 
       <UsuarioProvider>
 
-        <CarritoProvider>
+        <ProductosProvider>
 
-          <App />
+          <CarritoProvider>
 
-        </CarritoProvider>
+            <App />
+
+          </CarritoProvider>
+
+        </ProductosProvider>
 
       </UsuarioProvider>
 

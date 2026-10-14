@@ -1,31 +1,63 @@
-import { useState } from "react";
-import { useParams, NavLink } from "react-router-dom";
+import {
+  useState
+} from "react";
 
-import { productos } from "../data/productos";
-import { useCarrito } from "../context/CarritoContext";
+import {
+  useParams,
+  NavLink
+} from "react-router-dom";
+
+import {
+  useCarrito
+} from "../context/CarritoContext";
+
+import {
+  useProductos
+} from "../context/ProductosContext";
 
 
 function DetalleProducto() {
 
-  const { id } = useParams();
-
-  const { agregarAlCarrito } = useCarrito();
-
-  const [cantidad, setCantidad] = useState(1);
+  const {
+    id
+  } = useParams();
 
 
-  const producto = productos.find(
-    (producto) =>
-      producto.id === Number(id)
-  );
+  const {
+    productos
+  } = useProductos();
 
 
-  function formatearPrecio(precio) {
+  const {
+    agregarAlCarrito
+  } = useCarrito();
 
-    return precio.toLocaleString("es-CL", {
-      style: "currency",
-      currency: "CLP"
-    });
+
+  const [
+    cantidad,
+    setCantidad
+  ] = useState(1);
+
+
+  const producto =
+    productos.find(
+      (producto) =>
+        producto.id ===
+        Number(id)
+    );
+
+
+  function formatearPrecio(
+    precio
+  ) {
+
+    return precio.toLocaleString(
+      "es-CL",
+      {
+        style: "currency",
+        currency: "CLP"
+      }
+    );
 
   }
 
@@ -83,7 +115,8 @@ function DetalleProducto() {
         </h1>
 
         <p>
-          El producto que estás buscando no existe.
+          El producto que estás buscando
+          no existe.
         </p>
 
         <NavLink
@@ -116,8 +149,12 @@ function DetalleProducto() {
             <div className="producto-detalle-imagen">
 
               <img
-                src={producto.imagen}
-                alt={producto.nombre}
+                src={
+                  producto.imagen
+                }
+                alt={
+                  producto.nombre
+                }
                 className="img-fluid"
               />
 
@@ -131,19 +168,25 @@ function DetalleProducto() {
           <div className="col-lg-6">
 
             <span className="badge bg-dark mb-3">
+
               {producto.categoria}
+
             </span>
 
 
             <h1 className="mb-3">
+
               {producto.nombre}
+
             </h1>
 
 
             <h2 className="precio-producto mb-4">
+
               {formatearPrecio(
                 producto.precio
               )}
+
             </h2>
 
 
@@ -151,35 +194,44 @@ function DetalleProducto() {
 
 
             <p className="descripcion-producto">
+
               {producto.descripcion}
+
             </p>
 
 
             <p>
+
               <strong>
                 Plataforma:
               </strong>{" "}
+
               {producto.plataforma}
+
             </p>
 
 
             <p>
+
               <strong>
                 Código:
               </strong>{" "}
+
               {producto.codigo}
+
             </p>
 
 
             <p>
+
               <strong>
                 Stock disponible:
               </strong>{" "}
+
               {producto.stock}
+
             </p>
 
-
-            {/* CANTIDAD */}
 
             <div className="mb-4">
 
@@ -197,7 +249,9 @@ function DetalleProducto() {
                 className="form-control"
                 value={cantidad}
                 min="1"
-                max={producto.stock}
+                max={
+                  producto.stock
+                }
                 onChange={(evento) =>
                   setCantidad(
                     evento.target.value
@@ -208,19 +262,24 @@ function DetalleProducto() {
             </div>
 
 
-            {/* AÑADIR AL CARRITO */}
-
             <button
               className="btn btn-warning btn-lg w-100"
               onClick={
                 manejarAgregarAlCarrito
               }
+              disabled={
+                producto.stock === 0
+              }
             >
-              Añadir al carrito
+
+              {
+                producto.stock === 0
+                  ? "Sin stock"
+                  : "Añadir al carrito"
+              }
+
             </button>
 
-
-            {/* VOLVER */}
 
             <NavLink
               to="/productos"

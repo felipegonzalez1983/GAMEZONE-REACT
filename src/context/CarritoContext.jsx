@@ -5,27 +5,50 @@ import {
   useState
 } from "react";
 
-import { productos } from "../data/productos";
+import {
+  useProductos
+} from "./ProductosContext";
 
 
-const CarritoContext = createContext();
+const CarritoContext =
+  createContext();
 
 
-export function CarritoProvider({ children }) {
+export function CarritoProvider({
+  children
+}) {
 
-  const [carrito, setCarrito] = useState(() => {
+  const {
+    productos
+  } = useProductos();
+
+
+  const [
+    carrito,
+    setCarrito
+  ] = useState(() => {
 
     const carritoGuardado =
-      localStorage.getItem("carritoGameZone");
+      localStorage.getItem(
+        "carritoGameZone"
+      );
+
 
     if (!carritoGuardado) {
       return [];
     }
 
+
     try {
-      return JSON.parse(carritoGuardado);
+
+      return JSON.parse(
+        carritoGuardado
+      );
+
     } catch {
+
       return [];
+
     }
 
   });
@@ -35,97 +58,176 @@ export function CarritoProvider({ children }) {
 
     localStorage.setItem(
       "carritoGameZone",
-      JSON.stringify(carrito)
+      JSON.stringify(
+        carrito
+      )
     );
 
   }, [carrito]);
 
 
-  function agregarAlCarrito(producto, cantidad = 1) {
+  function agregarAlCarrito(
+    producto,
+    cantidad = 1
+  ) {
 
-    setCarrito((carritoActual) => {
-
-      const productoExistente =
-        carritoActual.find(
-          (item) => item.id === producto.id
-        );
-
-
-      if (productoExistente) {
-
-        const nuevaCantidad =
-          productoExistente.cantidad + cantidad;
-
-
-        if (nuevaCantidad > producto.stock) {
-
-          alert(
-            `Solo hay ${producto.stock} unidades disponibles.`
-          );
-
-          return carritoActual;
-        }
-
-
-        alert(
-          `${producto.nombre} fue añadido al carrito.`
-        );
-
-
-        return carritoActual.map((item) =>
-
-          item.id === producto.id
-
-            ? {
-                ...item,
-                cantidad: nuevaCantidad
-              }
-
-            : item
-
-        );
-
-      }
-
-
-      if (cantidad > producto.stock) {
-
-        alert(
-          `Solo hay ${producto.stock} unidades disponibles.`
-        );
-
-        return carritoActual;
-      }
-
-
-      alert(
-        `${producto.nombre} fue añadido al carrito.`
+    const productoActual =
+      productos.find(
+        (item) =>
+          item.id ===
+          producto.id
       );
 
 
-      return [
-        ...carritoActual,
-        {
-          id: producto.id,
-          nombre: producto.nombre,
-          precio: producto.precio,
-          imagen: producto.imagen,
-          cantidad: cantidad
-        }
-      ];
+    if (!productoActual) {
 
-    });
+      alert(
+        "Este producto ya no está disponible."
+      );
+
+      return;
+
+    }
+
+
+    if (
+      productoActual.stock <= 0
+    ) {
+
+      alert(
+        "Este producto no tiene stock disponible."
+      );
+
+      return;
+
+    }
+
+
+    setCarrito(
+      (carritoActual) => {
+
+        const productoExistente =
+          carritoActual.find(
+            (item) =>
+              item.id ===
+              productoActual.id
+          );
+
+
+        if (productoExistente) {
+
+          const nuevaCantidad =
+            productoExistente.cantidad +
+            cantidad;
+
+
+          if (
+            nuevaCantidad >
+            productoActual.stock
+          ) {
+
+            alert(
+              `Solo hay ${productoActual.stock} unidades disponibles.`
+            );
+
+            return carritoActual;
+
+          }
+
+
+          alert(
+            `${productoActual.nombre} fue añadido al carrito.`
+          );
+
+
+          return carritoActual.map(
+            (item) =>
+
+              item.id ===
+              productoActual.id
+
+                ? {
+                    ...item,
+
+                    nombre:
+                      productoActual.nombre,
+
+                    precio:
+                      productoActual.precio,
+
+                    imagen:
+                      productoActual.imagen,
+
+                    cantidad:
+                      nuevaCantidad
+                  }
+
+                : item
+
+          );
+
+        }
+
+
+        if (
+          cantidad >
+          productoActual.stock
+        ) {
+
+          alert(
+            `Solo hay ${productoActual.stock} unidades disponibles.`
+          );
+
+          return carritoActual;
+
+        }
+
+
+        alert(
+          `${productoActual.nombre} fue añadido al carrito.`
+        );
+
+
+        return [
+          ...carritoActual,
+
+          {
+            id:
+              productoActual.id,
+
+            nombre:
+              productoActual.nombre,
+
+            precio:
+              productoActual.precio,
+
+            imagen:
+              productoActual.imagen,
+
+            cantidad:
+              cantidad
+          }
+        ];
+
+      }
+    );
 
   }
 
 
-  function eliminarDelCarrito(idProducto) {
+  function eliminarDelCarrito(
+    idProducto
+  ) {
 
-    setCarrito((carritoActual) =>
-      carritoActual.filter(
-        (producto) =>
-          producto.id !== idProducto
-      )
+    setCarrito(
+      (carritoActual) =>
+
+        carritoActual.filter(
+          (producto) =>
+            producto.id !==
+            idProducto
+        )
+
     );
 
   }
@@ -136,12 +238,19 @@ export function CarritoProvider({ children }) {
     nuevaCantidad
   ) {
 
-    const cantidad = Number(nuevaCantidad);
+    const cantidad =
+      Number(
+        nuevaCantidad
+      );
 
 
-    if (cantidad <= 0) {
+    if (
+      cantidad <= 0
+    ) {
 
-      eliminarDelCarrito(idProducto);
+      eliminarDelCarrito(
+        idProducto
+      );
 
       return;
 
@@ -151,39 +260,68 @@ export function CarritoProvider({ children }) {
     const productoOriginal =
       productos.find(
         (producto) =>
-          producto.id === idProducto
+          producto.id ===
+          idProducto
       );
 
 
     if (!productoOriginal) {
+
+      alert(
+        "Este producto ya no está disponible."
+      );
+
+      eliminarDelCarrito(
+        idProducto
+      );
+
       return;
+
     }
 
 
-    if (cantidad > productoOriginal.stock) {
+    if (
+      cantidad >
+      productoOriginal.stock
+    ) {
 
       alert(
         `Solo hay ${productoOriginal.stock} unidades disponibles.`
       );
 
       return;
+
     }
 
 
-    setCarrito((carritoActual) =>
+    setCarrito(
+      (carritoActual) =>
 
-      carritoActual.map((producto) =>
+        carritoActual.map(
+          (producto) =>
 
-        producto.id === idProducto
+            producto.id ===
+            idProducto
 
-          ? {
-              ...producto,
-              cantidad: cantidad
-            }
+              ? {
+                  ...producto,
 
-          : producto
+                  nombre:
+                    productoOriginal.nombre,
 
-      )
+                  precio:
+                    productoOriginal.precio,
+
+                  imagen:
+                    productoOriginal.imagen,
+
+                  cantidad:
+                    cantidad
+                }
+
+              : producto
+
+        )
 
     );
 
@@ -199,17 +337,25 @@ export function CarritoProvider({ children }) {
 
   const cantidadCarrito =
     carrito.reduce(
-      (total, producto) =>
-        total + producto.cantidad,
+      (
+        total,
+        producto
+      ) =>
+        total +
+        producto.cantidad,
       0
     );
 
 
   const totalCarrito =
     carrito.reduce(
-      (total, producto) =>
+      (
+        total,
+        producto
+      ) =>
         total +
-        producto.precio * producto.cantidad,
+        producto.precio *
+        producto.cantidad,
       0
     );
 
@@ -239,6 +385,8 @@ export function CarritoProvider({ children }) {
 
 export function useCarrito() {
 
-  return useContext(CarritoContext);
+  return useContext(
+    CarritoContext
+  );
 
 }

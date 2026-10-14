@@ -61,7 +61,7 @@ function Navbar() {
         </NavLink>
 
 
-        {/* BOTÓN PARA CELULAR */}
+        {/* BOTÓN CELULAR */}
 
         <button
           className="navbar-toggler"
@@ -89,8 +89,6 @@ function Navbar() {
           <ul className="navbar-nav ms-lg-4 align-items-lg-center">
 
 
-            {/* INICIO */}
-
             <li className="nav-item">
 
               <NavLink
@@ -103,8 +101,6 @@ function Navbar() {
             </li>
 
 
-            {/* PRODUCTOS */}
-
             <li className="nav-item">
 
               <NavLink
@@ -116,8 +112,6 @@ function Navbar() {
 
             </li>
 
-
-            {/* CARRITO */}
 
             <li className="nav-item">
 
@@ -139,8 +133,6 @@ function Navbar() {
             </li>
 
 
-            {/* NOSOTROS */}
-
             <li className="nav-item">
 
               <NavLink
@@ -152,8 +144,6 @@ function Navbar() {
 
             </li>
 
-
-            {/* BLOGS */}
 
             <li className="nav-item">
 
@@ -167,8 +157,6 @@ function Navbar() {
             </li>
 
 
-            {/* CONTACTO */}
-
             <li className="nav-item">
 
               <NavLink
@@ -181,13 +169,13 @@ function Navbar() {
             </li>
 
 
-            {/* OPCIONES SI EL USUARIO INICIÓ SESIÓN */}
+            {/* USUARIO CON SESIÓN */}
 
             {usuario ? (
 
               <>
 
-                {/* HISTORIAL SOLO PARA CLIENTES */}
+                {/* CLIENTE */}
 
                 {usuario.rol === "Cliente" && (
 
@@ -205,7 +193,25 @@ function Navbar() {
                 )}
 
 
-                {/* NOMBRE DEL USUARIO */}
+                {/* ADMINISTRADOR */}
+
+                {usuario.rol === "Administrador" && (
+
+                  <li className="nav-item">
+
+                    <NavLink
+                      className="nav-link text-warning"
+                      to="/admin"
+                    >
+                      Administración
+                    </NavLink>
+
+                  </li>
+
+                )}
+
+
+                {/* NOMBRE */}
 
                 <li className="nav-item">
 
@@ -237,7 +243,7 @@ function Navbar() {
 
             ) : (
 
-              /* SI NO HAY SESIÓN */
+              /* SIN SESIÓN */
 
               <li className="nav-item">
 
@@ -251,7 +257,6 @@ function Navbar() {
               </li>
 
             )}
-
 
           </ul>
 

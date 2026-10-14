@@ -1,10 +1,21 @@
-import { NavLink } from "react-router-dom";
+import {
+  NavLink
+} from "react-router-dom";
 
-import { productos } from "../data/productos";
-import ProductoCard from "../components/ProductoCard";
+import ProductoCard
+  from "../components/ProductoCard";
+
+import {
+  useProductos
+} from "../context/ProductosContext";
 
 
 function Inicio() {
+
+  const {
+    productos
+  } = useProductos();
+
 
   const productosDestacados =
     productos.slice(0, 3);
@@ -136,20 +147,36 @@ function Inicio() {
         </p>
 
 
-        <div className="row justify-content-center">
+        {productosDestacados.length > 0 ? (
 
-          {productosDestacados.map(
-            (producto) => (
+          <div className="row justify-content-center">
 
-              <ProductoCard
-                key={producto.id}
-                producto={producto}
-              />
+            {productosDestacados.map(
+              (producto) => (
 
-            )
-          )}
+                <ProductoCard
+                  key={
+                    producto.id
+                  }
+                  producto={
+                    producto
+                  }
+                />
 
-        </div>
+              )
+            )}
+
+          </div>
+
+        ) : (
+
+          <div className="alert alert-secondary text-center">
+
+            Actualmente no hay productos disponibles.
+
+          </div>
+
+        )}
 
 
         <div className="text-center mt-4">
@@ -194,7 +221,7 @@ function Inicio() {
       </section>
 
 
-      {/* INVITACIÓN A REGISTRARSE */}
+      {/* REGISTRO */}
 
       <section className="registro-invitacion py-5">
 
