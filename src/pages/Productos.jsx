@@ -29,17 +29,26 @@ function Productos() {
   ] = useState("Todos");
 
 
-  const categorias =
-    [
-      "Todos",
-      ...new Set(
-        productos.map(
-          (producto) =>
-            producto.categoria
-        )
-      )
-    ];
+  /*
+    Las categorías se obtienen
+    de los productos disponibles.
+  */
 
+  const categorias = [
+    "Todos",
+
+    ...new Set(
+      productos.map(
+        (producto) =>
+          producto.categoria
+      )
+    )
+  ];
+
+
+  /*
+    FILTRAR PRODUCTOS
+  */
 
   const productosFiltrados =
     productos.filter(
@@ -107,78 +116,146 @@ function Productos() {
 
     <main>
 
-      <section className="container py-5">
 
-        <h1 className="text-center mb-3">
-          Productos
-        </h1>
+      {/* ENCABEZADO */}
 
-        <p className="text-center mb-5">
-          Encuentra consolas, videojuegos
-          y accesorios gamer.
-        </p>
+      <section
+        className="
+          encabezado-pagina
+          text-white
+          text-center
+          py-5
+        "
+      >
 
+        <div className="container">
 
-        <div className="row mb-4">
+          <h1>
+            Nuestros productos
+          </h1>
 
-          <div className="col-md-8 mb-3">
+          <p>
+            Encuentra consolas y accesorios
+            para mejorar tu experiencia gamer.
+          </p>
 
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Buscar productos..."
-              value={busqueda}
-              onChange={(evento) =>
-                setBusqueda(
-                  evento.target.value
-                )
-              }
-            />
+        </div>
 
-          </div>
+      </section>
 
 
-          <div className="col-md-4 mb-3">
+      {/* BUSCADOR Y FILTROS */}
 
-            <select
-              className="form-select"
-              value={categoria}
-              onChange={(evento) =>
-                setCategoria(
-                  evento.target.value
-                )
+      <section className="container pt-5">
+
+        <div className="row justify-content-center">
+
+          <div className="col-lg-8">
+
+            <form
+              className="row g-3"
+              onSubmit={(evento) =>
+                evento.preventDefault()
               }
             >
 
-              {categorias.map(
-                (categoriaActual) => (
 
-                  <option
-                    key={
+              {/* BUSCADOR */}
+
+              <div className="col-md-8">
+
+                <label
+                  htmlFor="buscador-productos"
+                  className="form-label"
+                >
+                  Buscar un producto
+                </label>
+
+
+                <input
+                  id="buscador-productos"
+                  type="search"
+                  className="form-control"
+                  placeholder="Ejemplo: PlayStation, Xbox o teclado"
+                  value={busqueda}
+                  onChange={(evento) =>
+                    setBusqueda(
+                      evento.target.value
+                    )
+                  }
+                />
+
+              </div>
+
+
+              {/* CATEGORÍA */}
+
+              <div className="col-md-4">
+
+                <label
+                  htmlFor="filtro-categoria"
+                  className="form-label"
+                >
+                  Categoría
+                </label>
+
+
+                <select
+                  id="filtro-categoria"
+                  className="form-select"
+                  value={categoria}
+                  onChange={(evento) =>
+                    setCategoria(
+                      evento.target.value
+                    )
+                  }
+                >
+
+                  {categorias.map(
+                    (
                       categoriaActual
-                    }
-                    value={
-                      categoriaActual
-                    }
-                  >
-                    {categoriaActual}
-                  </option>
+                    ) => (
 
-                )
-              )}
+                      <option
+                        key={
+                          categoriaActual
+                        }
+                        value={
+                          categoriaActual
+                        }
+                      >
+                        {
+                          categoriaActual
+                        }
+                      </option>
 
-            </select>
+                    )
+                  )}
+
+                </select>
+
+              </div>
+
+
+            </form>
 
           </div>
 
         </div>
 
+      </section>
+
+
+      {/* PRODUCTOS */}
+
+      <section className="container py-5">
 
         {productosFiltrados.length === 0 ? (
 
-          <div className="alert alert-secondary text-center">
+          <div className="alert alert-warning text-center">
 
-            No se encontraron productos.
+            No encontramos productos
+            con esa búsqueda.
 
           </div>
 
@@ -206,6 +283,7 @@ function Productos() {
         )}
 
       </section>
+
 
     </main>
 

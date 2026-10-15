@@ -65,13 +65,17 @@ const blogs = [
 
 function DetalleBlog() {
 
-  const { id } = useParams();
+  const {
+    id
+  } = useParams();
 
 
-  const blog = blogs.find(
-    (blog) =>
-      blog.id === Number(id)
-  );
+  const blog =
+    blogs.find(
+      (blog) =>
+        blog.id ===
+        Number(id)
+    );
 
 
   if (!blog) {
@@ -107,6 +111,7 @@ function DetalleBlog() {
 
     <main>
 
+
       {/* ENCABEZADO */}
 
       <section className="encabezado-pagina text-white text-center py-5">
@@ -140,8 +145,12 @@ function DetalleBlog() {
 
 
                 <img
-                  src={blog.imagen}
-                  alt={blog.alt}
+                  src={
+                    blog.imagen
+                  }
+                  alt={
+                    blog.alt
+                  }
                   className="imagen-detalle-blog"
                 />
 
@@ -154,9 +163,16 @@ function DetalleBlog() {
 
 
                   {blog.parrafos.map(
-                    (parrafo, indice) => (
+                    (
+                      parrafo,
+                      indice
+                    ) => (
 
-                      <p key={indice}>
+                      <p
+                        key={
+                          indice
+                        }
+                      >
                         {parrafo}
                       </p>
 
@@ -168,20 +184,31 @@ function DetalleBlog() {
 
                     <NavLink
                       to="/blogs"
-                      className="btn btn-warning me-2"
+                      className={
+                        blog.id === 2
+                          ? "btn btn-warning me-2"
+                          : "btn btn-warning"
+                      }
                     >
                       ← Volver a los blogs
                     </NavLink>
 
 
-                    <NavLink
-                      to="/productos"
-                      className="btn btn-dark"
-                    >
-                      Ver productos
-                    </NavLink>
+                    {
+                      blog.id === 2 && (
+
+                        <NavLink
+                          to="/productos"
+                          className="btn btn-dark"
+                        >
+                          Ver productos
+                        </NavLink>
+
+                      )
+                    }
 
                   </div>
+
 
                 </div>
 
@@ -194,6 +221,7 @@ function DetalleBlog() {
         </div>
 
       </section>
+
 
     </main>
 

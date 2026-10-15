@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 
 import Layout from "./components/Layout";
+import AdminLayout from "./components/AdminLayout";
 
 import Inicio from "./pages/Inicio";
 import Productos from "./pages/Productos";
@@ -17,6 +18,7 @@ import DetalleBlog from "./pages/DetalleBlog";
 import Login from "./pages/Login";
 import Registro from "./pages/Registro";
 
+import AdminInicio from "./pages/AdminInicio";
 import Admin from "./pages/Admin";
 import AdminUsuarios from "./pages/AdminUsuarios";
 import AdminNuevoUsuario from "./pages/AdminNuevoUsuario";
@@ -27,6 +29,9 @@ function App() {
   return (
 
     <Routes>
+
+
+      {/* TIENDA */}
 
       <Route element={<Layout />}>
 
@@ -85,25 +90,38 @@ function App() {
           element={<Registro />}
         />
 
+      </Route>
 
-        {/* ADMINISTRACIÓN */}
+
+      {/* ADMINISTRACIÓN */}
+
+      <Route
+        path="/admin"
+        element={<AdminLayout />}
+      >
 
         <Route
-          path="/admin"
+          index
+          element={<AdminInicio />}
+        />
+
+        <Route
+          path="productos"
           element={<Admin />}
         />
 
         <Route
-          path="/admin/usuarios"
+          path="usuarios"
           element={<AdminUsuarios />}
         />
 
         <Route
-          path="/admin/usuarios/nuevo"
+          path="usuarios/nuevo"
           element={<AdminNuevoUsuario />}
         />
 
       </Route>
+
 
     </Routes>
 

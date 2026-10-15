@@ -45,6 +45,7 @@ function Navbar() {
 
       <div className="container">
 
+
         {/* LOGO */}
 
         <NavLink
@@ -54,7 +55,7 @@ function Navbar() {
 
           <img
             src="/logo-game-zone.jpeg"
-            alt="Game Zone"
+            alt="Logo de Game Zone"
             className="logo-tienda"
           />
 
@@ -117,26 +118,6 @@ function Navbar() {
             </li>
 
 
-            {/* CARRITO */}
-
-            <li className="nav-item">
-
-              <NavLink
-                className="nav-link"
-                to="/carrito"
-              >
-
-                Carrito
-
-                <span className="badge bg-warning text-dark ms-1">
-                  {cantidadCarrito}
-                </span>
-
-              </NavLink>
-
-            </li>
-
-
             {/* NOSOTROS */}
 
             <li className="nav-item">
@@ -159,7 +140,7 @@ function Navbar() {
                 className="nav-link"
                 to="/blogs"
               >
-                Blogs
+                Blog
               </NavLink>
 
             </li>
@@ -179,13 +160,36 @@ function Navbar() {
             </li>
 
 
+            {/* CARRITO */}
+
+            <li className="nav-item">
+
+              <NavLink
+                className="nav-link"
+                to="/carrito"
+              >
+
+                🛒 Carrito
+
+                <span className="badge bg-warning text-dark ms-1">
+
+                  {cantidadCarrito}
+
+                </span>
+
+              </NavLink>
+
+            </li>
+
+
             {/* USUARIO CON SESIÓN */}
 
             {usuario ? (
 
               <>
 
-                {/* CLIENTE */}
+
+                {/* HISTORIAL */}
 
                 {usuario.rol === "Cliente" && (
 
@@ -203,36 +207,20 @@ function Navbar() {
                 )}
 
 
-                {/* ADMINISTRADOR */}
+                {/* ADMINISTRACIÓN */}
 
                 {usuario.rol === "Administrador" && (
 
-                  <>
+                  <li className="nav-item">
 
-                    <li className="nav-item">
+                    <NavLink
+                      className="nav-link text-warning"
+                      to="/admin"
+                    >
+                      Administración
+                    </NavLink>
 
-                      <NavLink
-                        className="nav-link text-warning"
-                        to="/admin"
-                      >
-                        Administración
-                      </NavLink>
-
-                    </li>
-
-
-                    <li className="nav-item">
-
-                      <NavLink
-                        className="nav-link text-warning"
-                        to="/admin/usuarios"
-                      >
-                        Usuarios
-                      </NavLink>
-
-                    </li>
-
-                  </>
+                  </li>
 
                 )}
 
@@ -255,6 +243,7 @@ function Navbar() {
                 <li className="nav-item">
 
                   <button
+                    type="button"
                     className="btn btn-outline-warning ms-lg-2"
                     onClick={
                       manejarCerrarSesion
@@ -265,6 +254,7 @@ function Navbar() {
 
                 </li>
 
+
               </>
 
             ) : (
@@ -274,7 +264,7 @@ function Navbar() {
               <li className="nav-item">
 
                 <NavLink
-                  className="btn btn-warning ms-lg-2"
+                  className="btn btn-warning ms-lg-2 mt-2 mt-lg-0"
                   to="/login"
                 >
                   Iniciar sesión
@@ -283,6 +273,7 @@ function Navbar() {
               </li>
 
             )}
+
 
           </ul>
 

@@ -104,195 +104,232 @@ function DetalleProducto() {
   }
 
 
-  if (!producto) {
-
-    return (
-
-      <main className="container py-5 text-center">
-
-        <h1>
-          Producto no encontrado
-        </h1>
-
-        <p>
-          El producto que estás buscando
-          no existe.
-        </p>
-
-        <NavLink
-          to="/productos"
-          className="btn btn-warning"
-        >
-          Volver a productos
-        </NavLink>
-
-      </main>
-
-    );
-
-  }
-
-
   return (
 
     <main>
 
-      <section className="container py-5 detalle-producto">
 
-        <div className="row g-5 align-items-start">
+      {/* ENCABEZADO */}
 
+      <section
+        className="
+          encabezado-pagina
+          text-white
+          text-center
+          py-5
+        "
+      >
 
-          {/* IMAGEN */}
+        <div className="container">
 
-          <div className="col-lg-6">
+          <h1>
+            Detalle del producto
+          </h1>
 
-            <div className="producto-detalle-imagen">
+          <p>
+            Revisa las características
+            del producto seleccionado.
+          </p>
 
-              <img
-                src={
-                  producto.imagen
-                }
-                alt={
-                  producto.nombre
-                }
-                className="img-fluid"
-              />
+        </div>
 
-            </div>
-
-          </div>
-
-
-          {/* INFORMACIÓN */}
-
-          <div className="col-lg-6">
-
-            <span className="badge bg-dark mb-3">
-
-              {producto.categoria}
-
-            </span>
+      </section>
 
 
-            <h1 className="mb-3">
+      {/* PRODUCTO */}
 
-              {producto.nombre}
+      <section className="container py-5">
 
-            </h1>
+        {!producto ? (
 
+          /* PRODUCTO NO ENCONTRADO */
 
-            <h2 className="precio-producto mb-4">
+          <div className="alert alert-danger text-center">
 
-              {formatearPrecio(
-                producto.precio
-              )}
-
+            <h2>
+              Producto no encontrado
             </h2>
 
-
-            <hr />
-
-
-            <p className="descripcion-producto">
-
-              {producto.descripcion}
-
-            </p>
-
-
             <p>
-
-              <strong>
-                Plataforma:
-              </strong>{" "}
-
-              {producto.plataforma}
-
+              El producto seleccionado no existe.
             </p>
-
-
-            <p>
-
-              <strong>
-                Código:
-              </strong>{" "}
-
-              {producto.codigo}
-
-            </p>
-
-
-            <p>
-
-              <strong>
-                Stock disponible:
-              </strong>{" "}
-
-              {producto.stock}
-
-            </p>
-
-
-            <div className="mb-4">
-
-              <label
-                htmlFor="cantidad-producto"
-                className="form-label"
-              >
-                Cantidad
-              </label>
-
-
-              <input
-                id="cantidad-producto"
-                type="number"
-                className="form-control"
-                value={cantidad}
-                min="1"
-                max={
-                  producto.stock
-                }
-                onChange={(evento) =>
-                  setCantidad(
-                    evento.target.value
-                  )
-                }
-              />
-
-            </div>
-
-
-            <button
-              className="btn btn-warning btn-lg w-100"
-              onClick={
-                manejarAgregarAlCarrito
-              }
-              disabled={
-                producto.stock === 0
-              }
-            >
-
-              {
-                producto.stock === 0
-                  ? "Sin stock"
-                  : "Añadir al carrito"
-              }
-
-            </button>
-
 
             <NavLink
               to="/productos"
-              className="btn btn-outline-dark w-100 mt-3"
+              className="btn btn-dark"
             >
               Volver a productos
             </NavLink>
 
           </div>
 
-        </div>
+        ) : (
+
+          /* DETALLE DEL PRODUCTO */
+
+          <div className="detalle-producto">
+
+            <div className="row g-5 align-items-start">
+
+
+              {/* IMAGEN */}
+
+              <div className="col-lg-6">
+
+                <div className="producto-detalle-imagen">
+
+                  <img
+                    src={
+                      producto.imagen
+                    }
+                    alt={
+                      producto.nombre
+                    }
+                    className="img-fluid"
+                  />
+
+                </div>
+
+              </div>
+
+
+              {/* INFORMACIÓN */}
+
+              <div className="col-lg-6">
+
+                <span className="badge bg-dark mb-3">
+
+                  {producto.categoria}
+
+                </span>
+
+
+                <h1 className="mb-3">
+
+                  {producto.nombre}
+
+                </h1>
+
+
+                <h2 className="precio-producto mb-4">
+
+                  {formatearPrecio(
+                    producto.precio
+                  )}
+
+                </h2>
+
+
+                <hr />
+
+
+                <p className="descripcion-producto">
+
+                  {producto.descripcion}
+
+                </p>
+
+
+                <p>
+
+                  <strong>
+                    Plataforma:
+                  </strong>{" "}
+
+                  {producto.plataforma}
+
+                </p>
+
+
+                <p>
+
+                  <strong>
+                    Código:
+                  </strong>{" "}
+
+                  {producto.codigo}
+
+                </p>
+
+
+                <p>
+
+                  <strong>
+                    Stock disponible:
+                  </strong>{" "}
+
+                  {producto.stock}
+
+                </p>
+
+
+                {/* CANTIDAD */}
+
+                <div className="mb-4">
+
+                  <label
+                    htmlFor="cantidad-producto"
+                    className="form-label"
+                  >
+                    Cantidad
+                  </label>
+
+
+                  <input
+                    id="cantidad-producto"
+                    type="number"
+                    className="form-control"
+                    value={cantidad}
+                    min="1"
+                    max={
+                      producto.stock
+                    }
+                    onChange={(evento) =>
+                      setCantidad(
+                        evento.target.value
+                      )
+                    }
+                  />
+
+                </div>
+
+
+                {/* BOTÓN */}
+
+                <button
+                  type="button"
+                  className="btn btn-warning btn-lg w-100"
+                  onClick={
+                    manejarAgregarAlCarrito
+                  }
+                >
+                  Añadir al carrito
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        )}
 
       </section>
+
+
+      {/* VOLVER AL CATÁLOGO */}
+
+      <section className="container text-center pb-5">
+
+        <NavLink
+          to="/productos"
+          className="btn btn-outline-dark"
+        >
+          ← Volver al catálogo
+        </NavLink>
+
+      </section>
+
 
     </main>
 

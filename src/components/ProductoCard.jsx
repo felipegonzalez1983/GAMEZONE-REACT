@@ -1,20 +1,33 @@
-import { NavLink } from "react-router-dom";
+import {
+  NavLink
+} from "react-router-dom";
 
-import { useCarrito } from "../context/CarritoContext";
-
-
-function ProductoCard({ producto }) {
-
-  const { agregarAlCarrito } =
-    useCarrito();
+import {
+  useCarrito
+} from "../context/CarritoContext";
 
 
-  function formatearPrecio(precio) {
+function ProductoCard({
+  producto,
+  destacado = false
+}) {
 
-    return precio.toLocaleString("es-CL", {
-      style: "currency",
-      currency: "CLP"
-    });
+  const {
+    agregarAlCarrito
+  } = useCarrito();
+
+
+  function formatearPrecio(
+    precio
+  ) {
+
+    return precio.toLocaleString(
+      "es-CL",
+      {
+        style: "currency",
+        currency: "CLP"
+      }
+    );
 
   }
 
@@ -25,11 +38,18 @@ function ProductoCard({ producto }) {
 
       <div className="card tarjeta-producto">
 
+
+        {/* IMAGEN */}
+
         <div className="producto-imagen">
 
           <img
-            src={producto.imagen}
-            alt={producto.nombre}
+            src={
+              producto.imagen
+            }
+            alt={
+              producto.nombre
+            }
             className="imagen-consola"
           />
 
@@ -38,46 +58,91 @@ function ProductoCard({ producto }) {
 
         <div className="card-body">
 
+
+          {/* ETIQUETA */}
+
           <span className="badge bg-dark mb-2">
-            {producto.categoria}
+
+            {
+              destacado
+                ? producto.plataforma
+                : producto.categoria
+            }
+
           </span>
 
 
+          {/* NOMBRE */}
+
           <h3 className="card-title">
+
             {producto.nombre}
+
           </h3>
 
 
+          {/* DESCRIPCIÓN */}
+
           <p className="card-text">
+
             {producto.descripcion}
+
           </p>
 
 
-          <p>
-            Plataforma:{" "}
-            <strong>
-              {producto.plataforma}
-            </strong>
-          </p>
+          {/* PLATAFORMA */}
+
+          {!destacado && (
+
+            <p>
+
+              Plataforma:{" "}
+
+              <strong>
+                {producto.plataforma}
+              </strong>
+
+            </p>
+
+          )}
 
 
+          {/* STOCK */}
+
           <p>
-            Stock:{" "}
+
+            {
+              destacado
+                ? "Stock disponible: "
+                : "Stock: "
+            }
+
             <strong>
               {producto.stock}
             </strong>
+
           </p>
 
 
+          {/* PRECIO */}
+
           <h4>
-            {formatearPrecio(producto.precio)}
+
+            {formatearPrecio(
+              producto.precio
+            )}
+
           </h4>
 
+
+          {/* BOTONES */}
 
           <div className="d-grid gap-2">
 
             <NavLink
-              to={`/productos/${producto.id}`}
+              to={
+                `/productos/${producto.id}`
+              }
               className="btn btn-outline-dark"
             >
               Ver detalle
@@ -85,15 +150,19 @@ function ProductoCard({ producto }) {
 
 
             <button
+              type="button"
               className="btn btn-warning"
               onClick={() =>
-                agregarAlCarrito(producto)
+                agregarAlCarrito(
+                  producto
+                )
               }
             >
               Añadir al carrito
             </button>
 
           </div>
+
 
         </div>
 
@@ -102,6 +171,7 @@ function ProductoCard({ producto }) {
     </article>
 
   );
+
 }
 
 

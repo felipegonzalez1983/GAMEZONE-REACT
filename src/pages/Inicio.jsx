@@ -161,6 +161,7 @@ function Inicio() {
                   producto={
                     producto
                   }
+                  destacado={true}
                 />
 
               )

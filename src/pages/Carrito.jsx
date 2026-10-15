@@ -76,6 +76,21 @@ function Carrito() {
 
   function finalizarCompra() {
 
+    /* CARRITO VACÍO */
+
+    if (
+      carrito.length === 0
+    ) {
+
+      alert(
+        "Debes agregar productos al carrito."
+      );
+
+      return;
+
+    }
+
+
     /* VALIDAR SESIÓN */
 
     if (!usuario) {
@@ -91,7 +106,7 @@ function Carrito() {
     }
 
 
-    /* VALIDAR STOCK ACTUAL */
+    /* VALIDAR STOCK */
 
     for (
       const productoCarrito
@@ -231,205 +246,305 @@ function Carrito() {
   }
 
 
-  if (
-    carrito.length === 0
-  ) {
-
-    return (
-
-      <main className="container py-5">
-
-        <h1>
-          Carrito
-        </h1>
-
-
-        <div className="carrito-vacio">
-
-          <p>
-            Tu carrito está vacío.
-          </p>
-
-
-          <NavLink
-            to="/productos"
-            className="btn btn-warning"
-          >
-            Ver productos
-          </NavLink>
-
-        </div>
-
-      </main>
-
-    );
-
-  }
-
-
   return (
 
-    <main className="container py-5">
-
-      <h1>
-        Carrito
-      </h1>
+    <main>
 
 
-      <div className="lista-carrito">
+      {/* ENCABEZADO */}
 
-        {carrito.map(
-          (producto) => {
+      <section
+        className="
+          encabezado-pagina
+          text-white
+          text-center
+          py-5
+        "
+      >
 
-            const subtotal =
-              producto.precio *
-              producto.cantidad;
+        <div className="container">
 
+          <h1>
+            Carrito de compras
+          </h1>
 
-            return (
-
-              <article
-                key={
-                  producto.id
-                }
-                className="producto-carrito"
-              >
-
-                <div className="carrito-imagen">
-
-                  <img
-                    src={
-                      producto.imagen
-                    }
-                    alt={
-                      producto.nombre
-                    }
-                  />
-
-                </div>
-
-
-                <div className="carrito-info">
-
-                  <h2>
-                    {producto.nombre}
-                  </h2>
-
-
-                  <p>
-
-                    Precio:{" "}
-
-                    {formatearPrecio(
-                      producto.precio
-                    )}
-
-                  </p>
-
-
-                  <p>
-
-                    Subtotal:{" "}
-
-                    <strong>
-
-                      {formatearPrecio(
-                        subtotal
-                      )}
-
-                    </strong>
-
-                  </p>
-
-                </div>
-
-
-                <div className="carrito-cantidad">
-
-                  <label>
-                    Cantidad
-                  </label>
-
-
-                  <input
-                    type="number"
-                    min="1"
-                    value={
-                      producto.cantidad
-                    }
-                    onChange={(evento) =>
-                      cambiarCantidad(
-                        producto.id,
-                        evento.target.value
-                      )
-                    }
-                  />
-
-                </div>
-
-
-                <div className="carrito-eliminar">
-
-                  <button
-                    className="btn btn-danger"
-                    onClick={() =>
-                      eliminarDelCarrito(
-                        producto.id
-                      )
-                    }
-                  >
-                    Eliminar
-                  </button>
-
-                </div>
-
-              </article>
-
-            );
-
-          }
-        )}
-
-      </div>
-
-
-      <div className="resumen-carrito">
-
-        <h2>
-
-          Total:{" "}
-
-          {formatearPrecio(
-            totalCarrito
-          )}
-
-        </h2>
-
-
-        <div className="acciones-carrito">
-
-          <button
-            className="btn btn-danger"
-            onClick={
-              manejarVaciarCarrito
-            }
-          >
-            Vaciar carrito
-          </button>
-
-
-          <button
-            className="btn btn-warning"
-            onClick={
-              finalizarCompra
-            }
-          >
-            Finalizar compra
-          </button>
+          <p>
+            Revisa tus productos antes
+            de finalizar la compra.
+          </p>
 
         </div>
 
-      </div>
+      </section>
+
+
+      {/* CARRITO */}
+
+      <section className="container py-5">
+
+        <div className="row g-4">
+
+
+          {/* PRODUCTOS */}
+
+          <div className="col-lg-8">
+
+            <h2 className="mb-4">
+              Productos seleccionados
+            </h2>
+
+
+            {carrito.length === 0 ? (
+
+              <div className="alert alert-secondary text-center">
+
+                Tu carrito está vacío.
+
+                <br />
+
+                <br />
+
+                <NavLink
+                  to="/productos"
+                  className="btn btn-warning"
+                >
+                  Ver productos
+                </NavLink>
+
+              </div>
+
+            ) : (
+
+              carrito.map(
+                (producto) => {
+
+                  const subtotal =
+                    producto.precio *
+                    producto.cantidad;
+
+
+                  return (
+
+                    <article
+                      key={
+                        producto.id
+                      }
+                      className="card mb-3"
+                    >
+
+                      <div className="row g-0 align-items-center">
+
+
+                        {/* IMAGEN */}
+
+                        <div className="col-md-3">
+
+                          <img
+                            src={
+                              producto.imagen
+                            }
+                            alt={
+                              producto.nombre
+                            }
+                            className="img-fluid p-3"
+                          />
+
+                        </div>
+
+
+                        {/* INFORMACIÓN */}
+
+                        <div className="col-md-5">
+
+                          <div className="card-body">
+
+                            <h3 className="h5">
+
+                              {producto.nombre}
+
+                            </h3>
+
+
+                            <p>
+
+                              Precio:{" "}
+
+                              {formatearPrecio(
+                                producto.precio
+                              )}
+
+                            </p>
+
+
+                            <p>
+
+                              Subtotal:{" "}
+
+                              <strong>
+
+                                {formatearPrecio(
+                                  subtotal
+                                )}
+
+                              </strong>
+
+                            </p>
+
+                          </div>
+
+                        </div>
+
+
+                        {/* CANTIDAD */}
+
+                        <div className="col-md-2 p-3">
+
+                          <label
+                            htmlFor={
+                              `cantidad-${producto.id}`
+                            }
+                            className="form-label"
+                          >
+                            Cantidad
+                          </label>
+
+
+                          <input
+                            id={
+                              `cantidad-${producto.id}`
+                            }
+                            type="number"
+                            className="form-control"
+                            min="1"
+                            value={
+                              producto.cantidad
+                            }
+                            onChange={(evento) =>
+                              cambiarCantidad(
+                                producto.id,
+                                evento.target.value
+                              )
+                            }
+                          />
+
+                        </div>
+
+
+                        {/* ELIMINAR */}
+
+                        <div className="col-md-2 p-3">
+
+                          <button
+                            type="button"
+                            className="btn btn-danger w-100"
+                            onClick={() =>
+                              eliminarDelCarrito(
+                                producto.id
+                              )
+                            }
+                          >
+                            Eliminar
+                          </button>
+
+                        </div>
+
+
+                      </div>
+
+                    </article>
+
+                  );
+
+                }
+              )
+
+            )}
+
+          </div>
+
+
+          {/* RESUMEN */}
+
+          <aside className="col-lg-4">
+
+            <div className="card shadow-sm">
+
+              <div className="card-body">
+
+                <h2 className="h4 mb-4">
+                  Resumen de la compra
+                </h2>
+
+
+                <div className="d-flex justify-content-between align-items-center mb-4">
+
+                  <span className="fs-5">
+                    Total:
+                  </span>
+
+                  <strong className="fs-4 text-danger">
+
+                    {formatearPrecio(
+                      totalCarrito
+                    )}
+
+                  </strong>
+
+                </div>
+
+
+                <div className="d-grid gap-3">
+
+
+                  {/* FINALIZAR */}
+
+                  <button
+                    type="button"
+                    className="btn btn-warning btn-lg"
+                    onClick={
+                      finalizarCompra
+                    }
+                  >
+                    Finalizar compra
+                  </button>
+
+
+                  {/* VACIAR */}
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-danger"
+                    onClick={
+                      manejarVaciarCarrito
+                    }
+                  >
+                    Vaciar carrito
+                  </button>
+
+
+                  {/* SEGUIR COMPRANDO */}
+
+                  <NavLink
+                    to="/productos"
+                    className="btn btn-outline-dark"
+                  >
+                    Seguir comprando
+                  </NavLink>
+
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </aside>
+
+
+        </div>
+
+      </section>
+
 
     </main>
 

@@ -102,7 +102,7 @@ function Login() {
       );
 
 
-      navigate("/");
+      navigate("/admin");
 
       return;
 
