@@ -1,57 +1,291 @@
-import { NavLink } from "react-router-dom";
+import {
+  NavLink,
+  useNavigate
+} from "react-router-dom";
+
+import {
+  useCarrito
+} from "../context/CarritoContext";
+
+import {
+  useUsuario
+} from "../context/UsuarioContext";
+
 
 function Navbar() {
+
+  const navigate = useNavigate();
+
+  const {
+    cantidadCarrito
+  } = useCarrito();
+
+  const {
+    usuario,
+    cerrarSesion
+  } = useUsuario();
+
+
+  function manejarCerrarSesion() {
+
+    cerrarSesion();
+
+    alert(
+      "Sesión cerrada correctamente."
+    );
+
+    navigate("/");
+
+  }
+
+
   return (
-    <nav className="navbar">
+
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+
       <div className="container">
 
-        <NavLink className="navbar-brand" to="/">
+
+        {/* LOGO */}
+
+        <NavLink
+          className="navbar-brand"
+          to="/"
+        >
+
           <img
             src="/logo-game-zone.jpeg"
-            alt="Game Zone"
+            alt="Logo de Game Zone"
             className="logo-tienda"
           />
+
         </NavLink>
 
-        <div className="navbar-collapse">
-          <ul className="navbar-nav">
 
-            <li>
-              <NavLink className="nav-link" to="/">
+        {/* BOTÓN CELULAR */}
+
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#menuPrincipal"
+          aria-controls="menuPrincipal"
+          aria-expanded="false"
+          aria-label="Abrir menú"
+        >
+
+          <span className="navbar-toggler-icon">
+          </span>
+
+        </button>
+
+
+        {/* MENÚ */}
+
+        <div
+          className="collapse navbar-collapse"
+          id="menuPrincipal"
+        >
+
+          <ul className="navbar-nav ms-lg-4 align-items-lg-center">
+
+
+            {/* INICIO */}
+
+            <li className="nav-item">
+
+              <NavLink
+                className="nav-link"
+                to="/"
+              >
                 Inicio
               </NavLink>
+
             </li>
 
-            <li>
-              <NavLink className="nav-link" to="/productos">
+
+            {/* PRODUCTOS */}
+
+            <li className="nav-item">
+
+              <NavLink
+                className="nav-link"
+                to="/productos"
+              >
                 Productos
               </NavLink>
+
             </li>
 
-            <li>
-              <NavLink className="nav-link" to="/carrito">
-                Carrito
+
+            {/* NOSOTROS */}
+
+            <li className="nav-item">
+
+              <NavLink
+                className="nav-link"
+                to="/nosotros"
+              >
+                Nosotros
               </NavLink>
+
             </li>
 
-            <li>
-              <NavLink className="nav-link" to="/contacto">
+
+            {/* BLOG */}
+
+            <li className="nav-item">
+
+              <NavLink
+                className="nav-link"
+                to="/blogs"
+              >
+                Blog
+              </NavLink>
+
+            </li>
+
+
+            {/* CONTACTO */}
+
+            <li className="nav-item">
+
+              <NavLink
+                className="nav-link"
+                to="/contacto"
+              >
                 Contacto
               </NavLink>
+
             </li>
 
-            <li>
-              <NavLink className="nav-link" to="/login">
-                Iniciar sesión
+
+            {/* CARRITO */}
+
+            <li className="nav-item">
+
+              <NavLink
+                className="nav-link"
+                to="/carrito"
+              >
+
+                🛒 Carrito
+
+                <span className="badge bg-warning text-dark ms-1">
+
+                  {cantidadCarrito}
+
+                </span>
+
               </NavLink>
+
             </li>
+
+
+            {/* USUARIO CON SESIÓN */}
+
+            {usuario ? (
+
+              <>
+
+
+                {/* HISTORIAL */}
+
+                {usuario.rol === "Cliente" && (
+
+                  <li className="nav-item">
+
+                    <NavLink
+                      className="nav-link"
+                      to="/historial"
+                    >
+                      Mis compras
+                    </NavLink>
+
+                  </li>
+
+                )}
+
+
+                {/* ADMINISTRACIÓN */}
+
+                {usuario.rol === "Administrador" && (
+
+                  <li className="nav-item">
+
+                    <NavLink
+                      className="nav-link text-warning"
+                      to="/admin"
+                    >
+                      Administración
+                    </NavLink>
+
+                  </li>
+
+                )}
+
+
+                {/* NOMBRE */}
+
+                <li className="nav-item">
+
+                  <span className="nav-link">
+
+                    👤 Hola, {usuario.nombre}
+
+                  </span>
+
+                </li>
+
+
+                {/* CERRAR SESIÓN */}
+
+                <li className="nav-item">
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-warning ms-lg-2"
+                    onClick={
+                      manejarCerrarSesion
+                    }
+                  >
+                    Cerrar sesión
+                  </button>
+
+                </li>
+
+
+              </>
+
+            ) : (
+
+              /* SIN SESIÓN */
+
+              <li className="nav-item">
+
+                <NavLink
+                  className="btn btn-warning ms-lg-2 mt-2 mt-lg-0"
+                  to="/login"
+                >
+                  Iniciar sesión
+                </NavLink>
+
+              </li>
+
+            )}
+
 
           </ul>
+
         </div>
 
       </div>
+
     </nav>
+
   );
+
 }
+
 
 export default Navbar;

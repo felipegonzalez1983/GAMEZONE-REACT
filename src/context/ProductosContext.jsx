@@ -1,0 +1,243 @@
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from "react";
+
+import {
+  productos as productosIniciales
+} from "../data/productos";
+
+
+const ProductosContext =
+  createContext();
+
+
+export function ProductosProvider({
+  children
+}) {
+
+  const [
+    productos,
+    setProductos
+  ] = useState(() => {
+
+    const productosGuardados =
+      localStorage.getItem(
+        "productosGameZone"
+      );
+
+
+    if (!productosGuardados) {
+      return productosIniciales;
+    }
+
+
+    try {
+
+      return JSON.parse(
+        productosGuardados
+      );
+
+    } catch {
+
+      return productosIniciales;
+
+    }
+
+  });
+
+
+  useEffect(() => {
+
+    localStorage.setItem(
+      "productosGameZone",
+      JSON.stringify(productos)
+    );
+
+  }, [productos]);
+
+
+  /* AGREGAR PRODUCTO */
+
+  function agregarProducto(
+    nuevoProducto
+  ) {
+
+    const nuevoId =
+      productos.length > 0
+
+        ? Math.max(
+            ...productos.map(
+              (producto) =>
+                producto.id
+            )
+          ) + 1
+
+        : 1;
+
+
+    const productoCompleto = {
+
+      ...nuevoProducto,
+
+      id: nuevoId,
+
+      precio:
+        Number(
+          nuevoProducto.precio
+        ),
+
+      stock:
+        Number(
+          nuevoProducto.stock
+        )
+
+    };
+
+
+    setProductos(
+      (productosActuales) => [
+        ...productosActuales,
+        productoCompleto
+      ]
+    );
+
+  }
+
+
+  /* EDITAR PRODUCTO */
+
+  function editarProducto(
+    idProducto,
+    datosActualizados
+  ) {
+
+    setProductos(
+      (productosActuales) =>
+
+        productosActuales.map(
+          (producto) =>
+
+            producto.id === idProducto
+
+              ? {
+                  ...producto,
+                  ...datosActualizados,
+
+                  precio:
+                    Number(
+                      datosActualizados.precio
+                    ),
+
+                  stock:
+                    Number(
+                      datosActualizados.stock
+                    )
+                }
+
+              : producto
+
+        )
+
+    );
+
+  }
+
+
+  /* ELIMINAR PRODUCTO */
+
+  function eliminarProducto(
+    idProducto
+  ) {
+
+    setProductos(
+      (productosActuales) =>
+
+        productosActuales.filter(
+          (producto) =>
+            producto.id !==
+            idProducto
+        )
+
+    );
+
+  }
+
+
+  /* DESCONTAR STOCK AL COMPRAR */
+
+  function descontarStock(
+    productosComprados
+  ) {
+
+    setProductos(
+      (productosActuales) =>
+
+        productosActuales.map(
+          (producto) => {
+
+            const productoComprado =
+              productosComprados.find(
+                (item) =>
+                  item.id ===
+                  producto.id
+              );
+
+
+            if (!productoComprado) {
+              return producto;
+            }
+
+
+            const nuevoStock =
+              producto.stock -
+              productoComprado.cantidad;
+
+
+            return {
+              ...producto,
+
+              stock:
+                nuevoStock < 0
+                  ? 0
+                  : nuevoStock
+            };
+
+          }
+        )
+
+    );
+
+  }
+
+
+  return (
+
+    <ProductosContext.Provider
+      value={{
+        productos,
+        agregarProducto,
+        editarProducto,
+        eliminarProducto,
+        descontarStock
+      }}
+    >
+
+      {children}
+
+    </ProductosContext.Provider>
+
+  );
+
+}
+
+
+export function useProductos() {
+
+  return useContext(
+    ProductosContext
+  );
+
+}
