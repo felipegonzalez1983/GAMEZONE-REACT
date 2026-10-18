@@ -1,4 +1,6 @@
+
 import { useState } from "react";
+
 import {
   NavLink,
   useNavigate
@@ -8,24 +10,15 @@ import {
   useUsuario
 } from "../context/UsuarioContext";
 
-
 function Login() {
 
   const navigate = useNavigate();
 
-  const { iniciarSesion } =
-    useUsuario();
+  const { iniciarSesion } = useUsuario();
 
-
-  const [correo, setCorreo] =
-    useState("");
-
-  const [contrasena, setContrasena] =
-    useState("");
-
-  const [errores, setErrores] =
-    useState({});
-
+  const [correo, setCorreo] = useState("");
+  const [contrasena, setContrasena] = useState("");
+  const [errores, setErrores] = useState({});
 
   function manejarSubmit(evento) {
 
@@ -36,52 +29,31 @@ function Login() {
     const correoLimpio =
       correo.trim().toLowerCase();
 
-
-    /* VALIDAR CORREO */
-
+    // VALIDAR CORREO
     const formatoCorreo =
       /^[a-zA-Z0-9._%+-]+@(duocuc\.cl|duoc\.cl|profesor\.duoc\.cl|gmail\.com)$/;
 
-
-    if (
-      !formatoCorreo.test(correoLimpio)
-    ) {
-
+    if (!formatoCorreo.test(correoLimpio)) {
       nuevosErrores.correo =
         "Ingresa un correo Duoc o Gmail.";
-
     }
 
-
-    /* VALIDAR CONTRASEÑA */
-
+    // VALIDAR CONTRASEÑA
     if (
       contrasena.length < 4 ||
       contrasena.length > 10
     ) {
-
       nuevosErrores.contrasena =
         "La contraseña debe tener entre 4 y 10 caracteres.";
-
     }
 
-
-    /* SI HAY ERRORES */
-
-    if (
-      Object.keys(nuevosErrores)
-        .length > 0
-    ) {
-
+    // COMPROBAR ERRORES
+    if (Object.keys(nuevosErrores).length > 0) {
       setErrores(nuevosErrores);
-
       return;
-
     }
 
-
-    /* ADMINISTRADOR */
-
+    // ACCESO DEL ADMINISTRADOR
     if (
       correoLimpio === "admin@gmail.com" &&
       contrasena === "1234"
@@ -93,86 +65,75 @@ function Login() {
         rol: "Administrador"
       });
 
-
       setErrores({});
 
-
-      alert(
-        "Bienvenido, administrador."
-      );
-
+      alert("Bienvenido, administrador.");
 
       navigate("/admin");
 
       return;
+    }
+
+    // RECUPERAR USUARIOS REGISTRADOS
+    // Mejorado para evitar errores con datos dañados
+    let usuariosGuardados = [];
+
+    try {
+
+      const datosGuardados = localStorage.getItem(
+        "usuariosGameZone"
+      );
+
+      const datos = datosGuardados
+        ? JSON.parse(datosGuardados)
+        : [];
+
+      usuariosGuardados = Array.isArray(datos)
+        ? datos
+        : [];
+
+    } catch {
+
+      usuariosGuardados = [];
 
     }
 
-
-    /* RECUPERAR USUARIOS REGISTRADOS */
-
-    const usuariosGuardados =
-      JSON.parse(
-        localStorage.getItem(
-          "usuariosGameZone"
-        )
-      ) || [];
-
-
-    /* BUSCAR USUARIO */
-
+    // BUSCAR USUARIO REGISTRADO
     const usuarioEncontrado =
       usuariosGuardados.find(
         (usuario) =>
-
-          usuario.correo ===
-            correoLimpio &&
-
-          usuario.contrasena ===
-            contrasena
+          usuario &&
+          typeof usuario.correo === "string" &&
+          usuario.correo.toLowerCase() === correoLimpio &&
+          usuario.contrasena === contrasena
       );
 
-
-    /* SI NO EXISTE */
-
+    // CREDENCIALES INCORRECTAS
     if (!usuarioEncontrado) {
 
       setErrores({
-        general:
-          "Correo o contraseña incorrectos."
+        general: "Correo o contraseña incorrectos."
       });
 
       return;
-
     }
 
-
-    /* INICIAR SESIÓN */
-
+    // INICIAR SESIÓN COMO CLIENTE
     iniciarSesion({
-      correo:
-        usuarioEncontrado.correo,
-
-      nombre:
-        usuarioEncontrado.nombre,
-
-      rol:
-        usuarioEncontrado.rol
+      correo: usuarioEncontrado.correo,
+      nombre: usuarioEncontrado.nombre,
+      rol: usuarioEncontrado.rol
     });
 
-
     setErrores({});
-
 
     alert(
       `Bienvenido, ${usuarioEncontrado.nombre}.`
     );
 
-
     navigate("/");
 
   }
-
 
   return (
 
@@ -186,15 +147,12 @@ function Login() {
             Iniciar sesión
           </h1>
 
-
           <form
             onSubmit={manejarSubmit}
             noValidate
           >
 
-
             {/* CORREO */}
-
             <div className="mb-3">
 
               <label
@@ -204,7 +162,6 @@ function Login() {
                 Correo electrónico
               </label>
 
-
               <input
                 type="email"
                 id="correo-login"
@@ -212,28 +169,18 @@ function Login() {
                 maxLength="100"
                 value={correo}
                 onChange={(evento) => {
-
-                  setCorreo(
-                    evento.target.value
-                  );
-
+                  setCorreo(evento.target.value);
                   setErrores({});
-
                 }}
               />
 
-
               <small className="text-danger">
-
                 {errores.correo}
-
               </small>
 
             </div>
 
-
             {/* CONTRASEÑA */}
-
             <div className="mb-3">
 
               <label
@@ -243,7 +190,6 @@ function Login() {
                 Contraseña
               </label>
 
-
               <input
                 type="password"
                 id="contrasena-login"
@@ -252,41 +198,27 @@ function Login() {
                 maxLength="10"
                 value={contrasena}
                 onChange={(evento) => {
-
-                  setContrasena(
-                    evento.target.value
-                  );
-
+                  setContrasena(evento.target.value);
                   setErrores({});
-
                 }}
               />
 
-
               <small className="text-danger">
-
                 {errores.contrasena}
-
               </small>
 
             </div>
 
-
-            {/* ERROR GENERAL */}
-
+            {/* MENSAJE DE ERROR */}
             {errores.general && (
 
               <div className="alert alert-danger">
-
                 {errores.general}
-
               </div>
 
             )}
 
-
-            {/* BOTÓN */}
-
+            {/* BOTÓN INGRESAR */}
             <button
               type="submit"
               className="btn btn-warning w-100"
@@ -294,12 +226,9 @@ function Login() {
               Ingresar
             </button>
 
-
           </form>
 
-
-          {/* REGISTRO */}
-
+          {/* ENLACE DE REGISTRO */}
           <p className="text-center mt-3">
 
             ¿No tienes una cuenta?{" "}
@@ -310,7 +239,6 @@ function Login() {
 
           </p>
 
-
         </div>
 
       </div>
@@ -320,6 +248,5 @@ function Login() {
   );
 
 }
-
 
 export default Login;
