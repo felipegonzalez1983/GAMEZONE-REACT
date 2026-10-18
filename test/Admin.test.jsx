@@ -4,7 +4,8 @@ import {
   it,
   expect,
   vi,
-  beforeEach
+  beforeEach,
+  afterEach
 } from "vitest";
 
 import {
@@ -16,32 +17,33 @@ import {
 import { MemoryRouter } from "react-router-dom";
 import Admin from "../src/pages/Admin";
 
-// Simulamos el usuario y las funciones de productos
+// Datos simulados para las pruebas
 const mocks = vi.hoisted(() => ({
   usuario: null,
+  productos: [],
   agregarProducto: vi.fn(),
   editarProducto: vi.fn(),
   eliminarProducto: vi.fn()
 }));
 
-// Simular el contexto de usuario
+// Simulamos el usuario
 vi.mock("../src/context/UsuarioContext", () => ({
   useUsuario: () => ({
     usuario: mocks.usuario
   })
 }));
 
-// Simular el catálogo de productos
+// Simulamos los productos
 vi.mock("../src/context/ProductosContext", () => ({
   useProductos: () => ({
-    productos: [],
+    productos: mocks.productos,
     agregarProducto: mocks.agregarProducto,
     editarProducto: mocks.editarProducto,
     eliminarProducto: mocks.eliminarProducto
   })
 }));
 
-// Mostrar el componente de administración
+// Mostrar el panel de administración
 function mostrarAdmin() {
   render(
     <MemoryRouter>
@@ -59,7 +61,7 @@ function usarAdministrador() {
   };
 }
 
-// Abrir el formulario
+// Abrir formulario de productos
 function abrirFormulario() {
   fireEvent.click(
     screen.getByRole("button", {
@@ -68,7 +70,7 @@ function abrirFormulario() {
   );
 }
 
-// Guardar formulario
+// Guardar un producto nuevo
 function guardarFormulario() {
   fireEvent.click(
     screen.getByRole("button", {
@@ -78,17 +80,17 @@ function guardarFormulario() {
   );
 }
 
-// Completar un producto de prueba
+// Completar los datos del producto
 function completarProducto() {
   const datos = {
-    Código: "TEST001",
-    Nombre: "Control Gamer",
+    Código: "TEST002",
+    Nombre: "Control Gamer Pro",
     Categoría: "Accesorios",
     Plataforma: "PC",
-    Precio: "15000",
-    Stock: "10",
-    Imagen: "/control.jpg",
-    Descripción: "Control para videojuegos"
+    Precio: "20000",
+    Stock: "15",
+    Imagen: "/control-pro.jpg",
+    Descripción: "Control gamer para PC"
   };
 
   Object.entries(datos).forEach(([campo, valor]) => {
@@ -99,12 +101,33 @@ function completarProducto() {
   });
 }
 
-describe("Pruebas de Administracion Game Zone", () => {
+describe("Pruebas del panel de administracion Game Zone", () => {
 
   beforeEach(() => {
-    mocks.usuario = null;
     vi.clearAllMocks();
+
+    mocks.usuario = null;
+
+    mocks.productos = [
+      {
+        id: 1,
+        codigo: "TEST001",
+        nombre: "Control Gamer",
+        categoria: "Accesorios",
+        plataforma: "PC",
+        precio: 15000,
+        stock: 10,
+        imagen: "/control.jpg",
+        descripcion: "Control para videojuegos"
+      }
+    ];
+
     vi.stubGlobal("alert", vi.fn());
+    vi.stubGlobal("confirm", vi.fn());
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   // PRUEBA 1
@@ -214,19 +237,101 @@ describe("Pruebas de Administracion Game Zone", () => {
     expect(
       mocks.agregarProducto
     ).toHaveBeenCalledWith({
-      codigo: "TEST001",
-      nombre: "Control Gamer",
+      codigo: "TEST002",
+      nombre: "Control Gamer Pro",
       categoria: "Accesorios",
       plataforma: "PC",
-      precio: 15000,
-      stock: 10,
-      imagen: "/control.jpg",
-      descripcion: "Control para videojuegos"
+      precio: 20000,
+      stock: 15,
+      imagen: "/control-pro.jpg",
+      descripcion: "Control gamer para PC"
     });
 
     expect(window.alert).toHaveBeenCalledWith(
       "Producto agregado correctamente."
     );
+  });
+
+  // PRUEBA 8
+  it("permite editar un producto", () => {
+    usarAdministrador();
+    mostrarAdmin();
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Editar"
+      })
+    );
+
+    fireEvent.change(
+      screen.getByLabelText("Nombre"),
+      {
+        target: {
+          value: "Control Gamer Editado"
+        }
+      }
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Guardar cambios"
+      })
+    );
+
+    expect(
+      mocks.editarProducto
+    ).toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({
+        nombre: "Control Gamer Editado",
+        precio: 15000,
+        stock: 10
+      })
+    );
+
+    expect(window.alert).toHaveBeenCalledWith(
+      "Producto actualizado correctamente."
+    );
+  });
+
+  // PRUEBA 9
+  it("elimina un producto cuando confirma", () => {
+    usarAdministrador();
+    mostrarAdmin();
+
+    window.confirm.mockReturnValue(true);
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Eliminar"
+      })
+    );
+
+    expect(
+      mocks.eliminarProducto
+    ).toHaveBeenCalledWith(1);
+
+    expect(window.alert).toHaveBeenCalledWith(
+      "Producto eliminado correctamente."
+    );
+  });
+
+  // PRUEBA 10
+  it("no elimina un producto si cancela", () => {
+    usarAdministrador();
+    mostrarAdmin();
+
+    window.confirm.mockReturnValue(false);
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Eliminar"
+      })
+    );
+
+    expect(
+      mocks.eliminarProducto
+    ).not.toHaveBeenCalled();
   });
 
 });
