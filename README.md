@@ -333,7 +333,7 @@ La versión antigua usaba documentos HTML con JavaScript. La versión nueva util
   </Route>
 </Routes>
 ```
-<img width="1448" height="1086" alt="image" src="https://github.com/user-attachments/assets/7b128876-512b-4594-b427-5a48694ce441" />
+<img width="700" height="500" alt="image" src="https://github.com/user-attachments/assets/7b128876-512b-4594-b427-5a48694ce441" />
 
 
 **Para explicar:** `Route` relaciona una dirección con un componente. `Layout` permite compartir la estructura de la tienda y evitar repetir el menú en cada página.
