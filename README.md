@@ -81,7 +81,14 @@ npm run cov    # Ejecutar pruebas y generar informe de cobertura
 
 *Resultados del reporte generado el 20 de octubre de 2026. La cobertura no es del 100 %; quedan áreas por ampliar.*
 
-![Reporte de cobertura de Game Zone](documentacion/Cobertura_GameZone.png)
+![Reporte de cobertura de Game Zone]
+
+<img width="1300" height="357" alt="image" src="https://github.com/user-attachments/assets/bb1c936c-a109-4fce-b0bf-2b3a80362b37" />
+
+
+
+
+
 
 ## 📚 Documentos de evaluación
 
