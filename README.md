@@ -79,6 +79,11 @@ npm run cov    # Ejecutar pruebas y generar informe de cobertura
 | Funciones | **71,32 %** |
 | Líneas | **72,37 %** |
 
+<img width="754" height="588" alt="image" src="https://github.com/user-attachments/assets/ad138055-fe19-4c36-a43f-96d88a218e2a" />
+
+
+
+
 *Resultados del reporte generado el 20 de octubre de 2026. La cobertura no es del 100 %; quedan áreas por ampliar.*
 
 ![Reporte de cobertura de Game Zone](documentacion/Cobertura_GameZone.png)
@@ -87,9 +92,11 @@ npm run cov    # Ejecutar pruebas y generar informe de cobertura
 
 | Documento | Descripción |
 |---|---|
-| 📘 [ERS actualizado — versión 2.0](documentacion/ERS_GameZone_Actualizado_React.docx) | Requisitos, reglas de negocio, casos de uso y arquitectura |
-| 📊 [Informe de cobertura de testing](documentacion/Informe_Cobertura_Testing_GameZone.docx) | Alcance de las pruebas, resultados y análisis |
-| 🖼️ [Captura de cobertura](documentacion/Cobertura_GameZone.png) | Evidencia visual del reporte de Vitest |
+
+| 🖼️ [Captura de cobertura]| Evidencia visual del reporte de Vitest |
+
+<img width="1303" height="363" alt="image" src="https://github.com/user-attachments/assets/b00023da-da93-4079-b993-aabb317d1288" />
+
 
 ## 🗂️ Organización principal
 
@@ -459,15 +466,7 @@ Ejecuto `npm test` y muestro los resultados. Luego ejecuto `npm run cov` para ge
 
 ---
 
-## 📚 Documentos de evaluación
 
-> **Importante:** los enlaces siguientes funcionan una vez que los tres archivos estén subidos a `documentacion/` en esta misma rama. La carpeta `coverage/` generada por Vitest **no** se agrega al repositorio; se entrega como ZIP separado por AVA.
-
-| Documento | Descripción |
-|---|---|
-| 📘 [ERS actualizado — versión 2.0](documentacion/ERS_GameZone_Actualizado_React.docx) | Requisitos, reglas de negocio, casos de uso y arquitectura |
-| 📊 [Informe de cobertura de testing](documentacion/Informe_Cobertura_Testing_GameZone.docx) | Alcance de las pruebas, resultados y análisis |
-| 🖼️ [Captura de cobertura](documentacion/Cobertura_GameZone.png) | Evidencia visual del reporte de Vitest |
 
 
 
