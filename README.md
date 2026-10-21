@@ -79,6 +79,10 @@ npm run cov    # Ejecutar pruebas y generar informe de cobertura
 | Funciones | **71,32 %** |
 | Líneas | **72,37 %** |
 
+
+<img width="754" height="588" alt="image" src="https://github.com/user-attachments/assets/ab2a81ab-0443-4fff-8b18-d0892d4acbba" />
+
+
 *Resultados del reporte generado el 20 de octubre de 2026. La cobertura no es del 100 %; quedan áreas por ampliar.*
 
 ![Reporte de cobertura de Game Zone]
