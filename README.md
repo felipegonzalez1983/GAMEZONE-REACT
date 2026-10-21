@@ -397,10 +397,6 @@ it("permite agregar un producto al carrito", () => {
 });
 ```
 
-
-![Prueba unitaria de ProductoCard](documentacion/GameZone_Prueba_ProductoCard_Explicada.png)
-
-
 **Cómo explicarlo al profesor:**
 
 - `describe`: agrupa pruebas relacionadas.
